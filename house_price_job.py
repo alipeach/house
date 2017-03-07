@@ -84,9 +84,13 @@ class HousePrice():
 
 		house_price_x = house_etree.xpath('//div[@class="inforTxt"]/dl/dt/span[@class="red20b"]')
 
-		house_title = house_title_x[0].text.encode('utf-8').strip()
+		house_title = '默认标题'
+		if len(house_title_x) > 0:
+			house_title = house_title_x[0].text.encode('utf-8').strip()
 
-		house_price = house_price_x[0].text.encode('utf-8')
+		house_price = "默认价格"
+		if len(house_price_x) > 0:
+			house_price = house_price_x[0].text.encode('utf-8')
 
 
 		return str(house_price) + ',' + str(house_title)
