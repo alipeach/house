@@ -55,8 +55,7 @@ class HousePrice():
 
 		str_house_info_list = '\n' +  '\n'.join(house_info_list)
 
-		print 
-		file_handler.over_write('/house_price.txt', str_house_info_list)
+		print file_handler.over_write('/house_price.txt', str_house_info_list)
 
 
 	#单条房屋价格入库,不判断重，重复数据拉出来再处理
@@ -78,7 +77,14 @@ class HousePrice():
 	#提取房屋标题和总价
 	def parse_house_info(slef,html):
 
-		house_etree = etree.HTML(html)
+		try:
+			house_etree = etree.HTML(html)
+			pass
+		except Exception, e:
+			print 'html 转 etree异常'
+			return None
+			
+		
 
 		house_title_x = house_etree.xpath('//div[@class="title"]/h1')
 
@@ -108,8 +114,12 @@ class HousePrice():
 				house_info = ''
 				if house_html is not None:
 					house_info = self.parse_house_info(house_html)
-					today_date_str = time.strftime('%Y%m%d')
-					self.store_house_data(house_url + ',' + house_info + ',' + today_date_str)
+					if house_info is None:
+						print '异常链接' + str(house_url)
+						continue	
+					else:
+						today_date_str = time.strftime('%Y%m%d')
+						self.store_house_data(house_url + ',' + house_info + ',' + today_date_str)
 		self.get_all_house_info_and_unique()
 
 
